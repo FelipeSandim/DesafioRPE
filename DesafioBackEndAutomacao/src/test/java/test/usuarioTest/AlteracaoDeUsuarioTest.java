@@ -1,0 +1,32 @@
+package test.usuarioTest;
+
+import baseTest.BaseTest;
+import io.restassured.response.Response;
+import jdk.jfr.Description;
+import org.apache.http.HttpStatus;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
+import service.usuarioService.AlteracaoDeUsuarioService;
+
+import static org.hamcrest.Matchers.equalTo;
+
+public class AlteracaoDeUsuarioTest extends BaseTest {
+
+    AlteracaoDeUsuarioService alteracao = new AlteracaoDeUsuarioService();
+
+    @Test
+    @Description("Teste de alteração de usuário com sucesso")
+    public void alterarUsuario() {
+        Response response =
+            alteracao.alterarUsuario("John", "Desenvolvedor PL")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .extract()
+                .response();
+        String updatedAt = response.path("updatedAt");
+        response.then().body( Matchers.containsString("John"));
+        response.then().body( Matchers.containsString("Desenvolvedor PL"))
+        .body("updatedAt", equalTo(updatedAt));
+        response.prettyPrint();
+    }
+}

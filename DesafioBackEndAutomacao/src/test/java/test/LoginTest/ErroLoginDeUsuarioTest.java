@@ -1,0 +1,55 @@
+package test.LoginTest;
+
+import baseTest.BaseTest;
+import io.restassured.response.Response;
+import jdk.jfr.Description;
+import org.apache.http.HttpStatus;
+import org.junit.jupiter.api.Test;
+import service.loginService.ErroDeLoginService;
+
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+
+public class ErroLoginDeUsuarioTest extends BaseTest {
+
+    ErroDeLoginService erroLogin = new ErroDeLoginService();
+
+    @Test
+    @Description("Teste de erro ao realizar login de usuario, onde o usuário passa o campo 'Senha' vazio")
+    public void loginDeUsuario() {
+        Response response =
+            erroLogin.erroAoLogar("GxOg9@example", "")
+                .then()
+                .statusCode(HttpStatus.SC_BAD_REQUEST)
+                .extract()
+                .response();
+        response.then().body("error", equalTo("Missing password"));
+        response.prettyPrint();
+    }
+
+    @Test
+    @Description("Teste de erro ao realizar login de usuario, onde o usuário passa o campo 'Email' vazio")
+    public void loginDeUsuarioComCapmoEmailVazio() {
+        Response response =
+            erroLogin.erroAoLogar("", "Teste123")
+                .then()
+                .statusCode(HttpStatus.SC_BAD_REQUEST)
+                .extract()
+                .response();
+        response.then().body("error", equalTo("Missing email or username"));
+        response.prettyPrint();
+    }
+
+    @Test
+    @Description("Teste de erro ao realizar login de usuario, onde o usuário passa o campos 'Email' e 'Senha' vazio")
+    public void loginDeUsuarioComCamposVazios() {
+        Response response =
+            erroLogin.erroAoLogar("", "")
+                .then()
+                .statusCode(HttpStatus.SC_BAD_REQUEST)
+                .extract()
+                .response();
+        response.then().body("error", equalTo("Missing email or username"));
+        response.prettyPrint();
+    }
+}

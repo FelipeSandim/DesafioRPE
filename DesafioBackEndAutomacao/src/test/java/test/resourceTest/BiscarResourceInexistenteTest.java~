@@ -1,0 +1,22 @@
+package test.resourceTest;
+
+import io.restassured.response.Response;
+import org.apache.http.HttpStatus;
+import org.junit.jupiter.api.Test;
+import service.resourceService.BuscarResourceInexistenteService;
+
+public class BiscarResourceInexistenteTest {
+
+    BuscarResourceInexistenteService inexistente = new BuscarResourceInexistenteService();
+
+    @Test
+    public void TestBuscarResourceInexistente() {
+        Response response = inexistente.buscarResourceInexistente()
+            .then()
+            .extract()
+            .response();
+        response.then()
+            .statusCode(HttpStatus.SC_NOT_FOUND);
+        response.prettyPrint();
+    }
+}

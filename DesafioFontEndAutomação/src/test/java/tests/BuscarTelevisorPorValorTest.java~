@@ -1,0 +1,19 @@
+package tests;
+
+
+import commons.BaseTest;
+import org.junit.Test;
+import pages.CategoriaTelevisoresPage;
+import pages.HomePage;
+
+public class teste extends BaseTest {
+
+    HomePage homePage = new HomePage();
+    CategoriaTelevisoresPage televisoresPage = new CategoriaTelevisoresPage();
+    @Test
+    public void test() {
+        homePage.buscarProduto("Smart TV");
+        televisoresPage.filtrarTelevisorPorValor();
+        televisoresPage.imprimirProdutosAcimaDe3500();
+    }
+}

@@ -1,0 +1,23 @@
+package service.usuarioService;
+
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+
+import static io.restassured.RestAssured.given;
+
+public class AtualizacaoDeUsuarioService {
+
+    public Response atualizarUsuario() {
+    Response response =
+        given()
+            .spec(specs.SetupRequestSpecification.requestSpecification())
+            .contentType(ContentType.JSON)
+            .body("{\n" +
+                "    \"name\": \"Ronaldo\",\n" +
+                "    \"job\": \"Analista de Testes\"\n" +
+                "\n}")
+            .when()
+            .patch("/api/users/2");
+    return response;
+    }
+}

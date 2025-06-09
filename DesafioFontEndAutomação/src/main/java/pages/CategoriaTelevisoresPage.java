@@ -1,0 +1,124 @@
+package pages;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import utils.Elements;
+import java.util.List;
+
+public class CategoriaTelevisoresPage extends BasePage {
+
+    private static final By precoBotaoVerTudo = By.cssSelector("button.FilterFacetCheckbox_showAll__e_whq");
+    private static final By checkbox = By.cssSelector("input[data-testid='fs-input'][value='2500-5000']");
+    private static final By dropOrdenarPor = By.cssSelector("button[data-testid='fs-dropdown-button']");
+    private static final By maioresPrecos = By.cssSelector("[data-testid='fs-dropdown-item'][data-index='4']");
+    private static final By botaoLista = By.xpath("//button[.//span[contains(text(), 'lista')]]");
+    private static final By verMaisProdutos = By.cssSelector("button[data-testid='pagination-button']");
+    private static final By cardPrincipal = By.cssSelector("div.ProductCard_productInfo__WAMw3");
+    private static final By nomeProduto = By.cssSelector("h3.ProductCard_productName__mwx7Y");
+    private static final By precoProduto = By.cssSelector("p.ProductCard_productPrice__XFEqu");
+    private static final By avaliacaoMedia = By.cssSelector("div.konfidency-reviews-showcase-rating .avg-rating");
+
+    public void filtrarTelevisorPorValor() {
+        waitVisibility(precoBotaoVerTudo);
+        scrollToElement(precoBotaoVerTudo);
+        click(precoBotaoVerTudo);
+        waitVisibility(checkbox);
+        click(checkbox);
+        waitVisibility(dropOrdenarPor);
+        click(dropOrdenarPor);
+        waitVisibility(maioresPrecos);
+        click(maioresPrecos);
+        Elements.wait.until(ExpectedConditions.visibilityOfElementLocated(cardPrincipal));
+        waitVisibility(botaoLista);
+        scrollToElement(botaoLista);
+        click(botaoLista);
+    }
+
+    private void scrollToElement(By by) {
+        WebElement element = element(by);
+        JavascriptExecutor js = (JavascriptExecutor) Elements.driver;
+        js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", element);
+    }
+
+    public void imprimirProdutosAcimaDe3500() {
+        System.out.println("Iniciando a impressão de produtos.");
+        try {
+            Elements.wait.until(ExpectedConditions.visibilityOfElementLocated(cardPrincipal));
+        } catch (Exception e) {
+            return;
+        }
+
+        while (true) {
+            int initialProductCount = Elements.driver.findElements(cardPrincipal).size();
+            try {
+                Elements.wait.until(ExpectedConditions.visibilityOfElementLocated(verMaisProdutos));
+                WebElement loadMoreButton = Elements.driver.findElement(verMaisProdutos);
+                if (loadMoreButton.isDisplayed() && loadMoreButton.isEnabled()) {
+                    scrollToElement(verMaisProdutos);
+                    click(verMaisProdutos);
+                    Elements.wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(cardPrincipal, initialProductCount));
+                    System.out.println("produtos carregados. Total atual: " + Elements.driver.findElements(cardPrincipal).size());
+                } else {System.out.println("Botão ver mais produtos não esta visivel na tela.");
+                    break;
+                }
+            } catch (Exception e) {
+                break;
+            }
+        }
+        List<WebElement> produtos = Elements.driver.findElements(cardPrincipal);
+        if (produtos.isEmpty()) {
+            System.out.println("Nenhum produto encontrado");
+            return;
+        }
+        System.out.println("\n  Produtos com valor acima de R$3500  ");
+        for (WebElement produtoCard : produtos) {
+            try {
+                String nome = "Nome não encontrado";
+                try {
+                    WebElement nomeElement = produtoCard.findElement(nomeProduto);
+                    nome = nomeElement.getAttribute("title");
+                    if (nome == null || nome.isEmpty()) {
+                        nome = nomeElement.getText();
+                    }
+                } catch (NoSuchElementException e) {
+                    System.err.println("Seletor '" + nomeProduto.toString() + "' para nome não encontrado. " + e.getMessage());
+                }
+                String precoStr = produtoCard.findElement(precoProduto).getText();
+                double preco = parsePreco(precoStr);
+                if (preco > 3500) {
+                    String estrelas = "Sem avaliação";
+                    try {
+                        WebElement avgRatingElement = produtoCard.findElement(avaliacaoMedia);
+                        estrelas = avgRatingElement.getText();
+                    } catch (NoSuchElementException e) {
+                        System.out.println("Elemento com avaliação ('" + avaliacaoMedia.toString() + "') não encontrado. " + e.getMessage());
+                    }
+                    System.out.println("● Informações do produto desejado:");
+                    System.out.println("● Nome: " + nome);
+                    System.out.println("● Valor: R$ " + String.format("%.2f", preco));
+                    System.out.println("● Estrelas: " + estrelas);
+                    System.out.println("------------------------------------");
+                }
+            } catch (Exception e) {
+                System.err.println("ERRO, Falha ao carregar produto. Verifique os seletores. Detalhes: " + e.getMessage());
+            }
+        }
+        System.out.println("Concluída a impressão dos produtos.");
+    }
+
+    private double parsePreco(String precoStr) {
+        String valorLimpo = precoStr.replaceAll("[^\\d,.]", "");
+        if (valorLimpo.contains(",")) {
+            valorLimpo = valorLimpo.replace(".", "").replace(",", ".");
+        }
+        try {
+            return Double.parseDouble(valorLimpo);
+        } catch (NumberFormatException e) {
+            System.err.println("ERRO, Não foi possível fazer o parse do preco " + e.getMessage());
+            return 0.0;
+        }
+    }
+}

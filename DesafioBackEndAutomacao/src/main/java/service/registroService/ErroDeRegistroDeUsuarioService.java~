@@ -1,0 +1,23 @@
+package service.registroService;
+
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+
+import static io.restassured.RestAssured.given;
+
+public class ErroDeRegistroDeUsuarioService {
+
+    public Response ErroAoRegistrarUsuario() {
+        Response response =
+                given()
+                        .spec(specs.SetupRequestSpecification.requestSpecification())
+                        .contentType(ContentType.JSON)
+                        .body("{\n" +
+                                "    \"email\": \"eve.holt@reqres.in\",\n" +
+                                "    \"password\": \"pistol\"\n" +
+                                "\n}")
+                        .when()
+                        .post("/api/register");
+        return response;
+    }
+}

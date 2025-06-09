@@ -1,0 +1,369 @@
+
+1. Documento de Plano de Testes
+
+Escopo dos Testes
+O que será testado:
+Validação dos campos obrigatórios indicados com asterisco (*), garantindo que o formulário não seja enviado quando esses campos estiverem vazios.
+Exibição de mensagens de erro apropriadas ao tentar enviar o formulário com dados incompletos ou inválidos.
+Comportamento esperado do sistema ao preencher corretamente os campos obrigatórios.
+Verificação de regras de negócio ativas nas funcionalidades disponíveis.
+Verificação de mensagens de sucesso após o envio de dados válidos.
+
+O que não será testado:
+Verificação da autenticação do sistema, garantindo que o acesso ocorra apenas com as credenciais padrão admin/admin.
+Testes de segurança avançada, como ataques de força bruta ou SQL Injection.
+Testes de desempenho e carga.
+Testes em múltiplas plataformas como dispositivos móveis — foco em ambiente web.
+Integrações com sistemas externos.
+Validação de estilos visuais e responsividade além do básico.
+
+Tipos de Teste:
+Testes Funcionais:
+Testes de Funcionalidade: Validar se cada funcionalidade da aplicação opera conforme as especificações e regras de negócio. Isso inclui testar fluxos felizes (sucesso) e fluxos de erro.
+Testes de Regressão: Após a detecção e correção de um defeito, reexecutar os testes anteriores para garantir que as alterações não introduziram novos bugs ou reintroduziram antigos.
+
+Testes Não-Funcionais (Alto Nível - Observacionais):
+Testes de Usabilidade: Observar a facilidade de uso da interface, clareza das mensagens de erro, tempo de resposta e feedback ao usuário.
+Testes de Interface do Usuário: Verificar a apresentação visual dos elementos, layout e consistência visual.
+
+Estimativa de Tempo:
+Considerando a aplicação e o escopo revisado:
+Planejamento deste documento: 2 horas
+Levantamento de Cenários/Casos de Teste: 2 horas
+Execução Manual de Testes: 2 horas
+Reporte de Erros e Melhorias: 1 horas
+Análise de Resultados e Parecer Final: 1 hora
+Tempo Total: Aproximadamente 8 horas.
+
+Riscos e Redução de impacto:
+Risco 1: Ambiente de Teste Instável.
+Impacto: Atraso ou isntabilidade nas respostas dos testes.
+Redução de impacto: Verificar a acessibilidade e estabilidade do sistema antes de iniciar os testes. Reportar quaisquer instabilidades imediatamente.
+
+Risco 2: Falta de Clareza nas Regras de Negócio (além das fornecidas).
+Impacto: Casos de teste incompletos ou validações incorretas.
+Redução de impacto: se basear nas regras fornecidas. Em caso de ireregularidades, documentar suposiçõesou buscar esclarecimento com o responsavel.
+
+Risco 3: Dificuldade na Reprodução de Defeitos.
+Impacto: Atraso na correção e validação.
+Redução de impacto: Seguir um padrão rigoroso de reportagem de erros, incluindo passos detalhados, screenshots e dados utilizados.
+
+Risco 4: Limitação de Dados de Teste.
+Impacto: Dificuldade em testar cenários específicos.
+Redução de impacto: Utilizar os dados existentes e documentar as limitações.
+
+2. Levantamento de Ideias de Testes e Casos de Teste
+
+Escopo
+O que será testado:
+
+Funcionalidades Principais:
+
+Incluir Cliente com sucesso
+Tentativa de incluir Cliente sem preencher o campo Nome
+Tentativa de incluir Cliente sem preencher o campo CPF
+Tentativa de incluir Cliente sem preencher o campo Saldo Dispinivel
+Tentativa de incluir Cliente com todos os campos vazios
+
+Listagem de clientes com sucesso.
+Listagem de cliente buscando por Nome e Data Validade com sucesso.
+Tentativa de listagem de clientes sem preencher campo nome e validade.
+Tentativa de listagem de clientes preenchendo campo nome e sem preencher campo validade.
+Tentativa de listagem de clientes sem preencher campo nome e preenchendo validade.
+Tentativa de listagem de clientes com usuário inválido
+Tentativa de listagem de clientes com data invlaida no campo Data Validade
+
+Incluir transação com Sucesso
+Incluir transação sem Selecionar o Cliente
+Incluir trasação sem preencher o campo Valor Transação
+
+Listar transações com a opção TODOS no campo Cliente
+Listar transações de um cliente expecifico
+
+
+Consideração: Assumimos que o usuário já está logado na aplicação. As pré-condições dos testes refletirão isso.
+
+"PAGINA INCLUIR CLIENTE"
+
+Casos de Teste:
+
+CT001 - Incluir Cliente com Sucesso:
+Objetivo: Validar inclisão de cliente com sucesso.
+Pré-condições: Usuário logado na aplicação.
+Passos:
+No menu "QA" na parte superior da tela navegar até a aba Clientes e selecionar a opção Incluir
+Preencher o nome do cliente.
+Preencher o CPF do cliente.
+Selecionar a opção Ativo.
+Preencher o valor desejado para o cliente no campo Saldo Disponivel.
+Clicar no botão Salvar
+Resultado Esperado:
+Mensagem de cliente salvo com sucesso.
+Sera apresentado os dados do cliente como Nome, CPF, o status Ativo, Saldo Disponivel e Validade Cartão.
+
+CT002 - Tentativa de incluir Cliente sem preencher o campo Nome:
+Objetivo: Validar a obrigatoriedade do campo Nome.
+Pré-condições: Usuário logado na aplicação.
+Passos:
+No menu "QA" na parte superior da tela navegar até a aba Clientes e selecionar a opção Incluir
+O campo nome não devera ser preenchido.
+Preencher o CPF do cliente.
+Selecionar a opção Ativo.
+Preencher o valor desejado para o cliente no campo Saldo Disponivel.
+Clicar no botão Salvar
+Resultado Esperado:
+Mensagem de erro "Campo obrigatório" em vermelho abaixo do campo Nome impossibilitando a inclusão do cliente.
+
+CT003 - Tentativa de incluir Cliente sem preencher o campo CPF:
+Objetivo: Validar a obrigatoriedade do campo CPF.
+Pré-condições: Usuário logado na aplicação.
+Passos:
+No menu "QA" na parte superior da tela navegar até a aba Clientes e selecionar a opção Incluir
+Preencher o Nome do cliente.
+O campo CPF não devera ser preenchido
+Selecionar a opção Ativo.
+Preencher o valor desejado para o cliente no campo Saldo Disponivel.
+Clicar no botão Salvar
+Resultado Esperado:
+Mensagem de erro "Campo obrigatório" em vermelho abaixo do campo CPF impossibilitando a inclusão do cliente.
+
+CT004 - Tentativa de incluir Cliente sem preencher o campo Saldo Dispinivel:
+Objetivo: Validar a obrigatoriedade do campo Saldo Dispinivel.
+Pré-condições: Usuário logado na aplicação.
+Passos:
+No menu "QA" na parte superior da tela navegar até a aba Clientes e selecionar a opção Incluir
+Preencher o Nome do cliente.
+Preencher o CPF do cliente.
+Selecionar a opção Ativo.
+O campo Saldo Dispinivel não devera ser preenchido
+Clicar no botão Salvar
+Resultado Esperado:
+Mensagem de erro "Campo obrigatório" em vermelho abaixo do campo Saldo Dispinivel impossibilitando a inclusão do cliente.
+
+CT005 - Tentativa de incluir Cliente com Todos os Campos Vazios:
+Objetivo: Validar a obrigatoriedade do campo Saldo Dispinivel.
+Pré-condições: Usuário logado na aplicação.
+Passos:
+No menu "QA" na parte superior da tela navegar até a aba Clientes e selecionar a opção Incluir
+O campo Nome Dispinivel não devera ser preenchido
+O campo CPF Dispinivel não devera ser preenchido
+Selecionar a opção Ativo.
+O campo Saldo Dispinivel não devera ser preenchido
+Clicar no botão Salvar
+Resultado Esperado:
+Mensagem de erro "Campo obrigatório" em vermelho abaixo do campo Nome, CPF e Saldo Dispinivel impossibilitando a inclusão do cliente.
+
+
+"PAGINA LISTAR CLIENTES"
+
+CT006 - Listagem de clientes com sucesso.
+Objetivo: Validar a listagem de clientes.
+Pré-condições: Usuário logado na aplicação.
+Passos:
+No menu "QA" na parte superior da tela navegar até a aba Clientes e selecionar a opção Listar.
+Resultado Esperado:
+Ao acessar a página de Listar Clientes será exibida uma tabela com todos os clientes cadastrados.
+
+CT007 - Listagem de cliente buscando por Nome e Data Validade com sucesso:
+Objetivo: Validar Busca de um unico cliente buscando pelos seu dados.
+Pré-condições: Usuário logado na aplicação.
+Passos:
+No menu "QA" na parte superior da tela navegar até a aba Clientes e selecionar a opção Listar.
+Preencher o campo nome com  o nome do cliente que será buscado
+preencher o campo Data Validade com a  a data de validade correspondente ao cliente.
+Clicar no botão pesquisar
+Resultado Esperado:
+Apos a busca no banco de dados serão exibidos os dados do cliente como Nome, CPF, Saldo Disponivel, Validade Cartão e as opções de acões em que pododera ser editado ou excluido o cliente.
+
+CT009 - Tentativa de listagem de clientes sem preencher campo Nome e Data Validade:
+Objetivo: Validar mensagem de erro nos campo Nome e Data Validade.
+Pré-condições: Usuário logado na aplicação.
+Passos:
+No menu "QA" na parte superior da tela navegar até a aba Clientes e selecionar a opção Listar.
+O campo Nome não devera ser preenchido.
+O campo Data Validade não devera ser preenchido.
+Clicar no botão pesquisar
+Resultado Esperado:
+Mensagem: Devera aparecer uma mensagem de erro com a frase "Campo Obrigatório" abaixo dos campos Nome e Data Validade.
+
+CT010 - Tentativa de listagem de clientes preenchendo campo nome e sem preencher campo validade.:
+Objetivo: Validar mensagem de erro quando tenta buscar um cliente informando o nome mas sem informar os dados do campo Data Validade.
+Pré-condições: Usuário logado na aplicação.
+Passos:
+No menu "QA" na parte superior da tela navegar até a aba Clientes e selecionar a opção Listar.
+Preencher o campo Nome Com o nome do cliente.
+Preencher o campo Data Validade com a data de validade correspondente ao cliente.
+Clicar no botão pesquisar
+Resultado Esperado:
+Mensagem: Devera aparecer uma mensagem de erro com a frase "Campo Obrigatório" abaixo do campo Data Validade.
+
+CT011 - Tentativa de listagem de clientes sem preencher campo Nome:
+Objetivo: Validar mensagem de erro quando tenta buscar um cliente sem informar o nome do cliente.
+Pré-condições: Usuário logado na aplicação.
+Passos:
+No menu "QA" na parte superior da tela navegar até a aba Clientes e selecionar a opção Listar.
+O campo Nome não devera ser preenchido.
+Preencher o campo Data Validade com a data de validade correspondente ao cliente.
+Clicar no botão pesquisar
+Resultado Esperado:
+Mensagem: Devera aparecer uma mensagem de erro com a frase "Campo Obrigatório" abaixo do campo Nome.
+
+CT012 - Tentativa de listagem de clientes com usuário inválido:
+Objetivo: Validar que nenhum dado é apresentado na tabela de clientes  quando é inserido os dados de um cliente inexistente.
+Pré-condições: Usuário logado na aplicação.
+Passos:
+No menu "QA" na parte superior da tela navegar até a aba Clientes e selecionar a opção Listar.
+Preencher o campo nome com  o nome de um cliente que não exista no banco de dados ou aum nome inexistente (atratra)
+preencher o campo Data Validade com a  a data de validade correspondente ao cliente.
+Clicar no botão pesquisar
+Resultado Esperado:
+A tabela de exibição de clientes deverá ficar em branco logo que não encontrou nenhum cliente relacionado a pesquisa..
+
+CT013 - Tentativa de listagem de clientes com data invlaida no campo Data Validade:
+Objetivo: Validar mensagem de erro quando tenta buscar um cliente sem informar o nome do cliente.
+Pré-condições: Usuário logado na aplicação.
+Passos:
+No menu "QA" na parte superior da tela navegar até a aba Clientes e selecionar a opção Listar.
+O campo Nome não devera ser preenchido.
+Preencher o campo Data Validade com uma data inválida (55/5555).
+Clicar no botão pesquisar
+Resultado Esperado:
+Mensagem: O campo Data Validade devera ficar vermelho em forma de alerta informando que o campo encontra-se com erro e nenhum cliente podera ser listado até informar uma data válida.
+
+
+"PAGINA INCLUIR TRANSAÇÃO"
+
+CT014 - Incluir transação com Sucesso:
+Objetivo: Validar que nenhum dado é apresentado na tabela de clientes  quando é inserido os dados de um cliente inexistente.
+Pré-condições: Usuário logado na aplicação.
+Passos:
+No menu "QA" na parte superior da tela navegar até a aba Transações e selecionar a opção Incluir.
+Clicar no campo Selecionar Cliente que ira listar os clientes cadastrados e selecionar o cliente desejado.
+Preencher o campo Valor Transação com o valor desejado.
+Clicar no botão Salvar
+Resultado Esperado:
+Mensagem: Na parte superior da tela ira aparecer uma mensagem dentro Venda realizada com sucesso.
+
+CT015 - Incluir transação sem Selecionar o Cliente:
+Objetivo: Validar que nenhum dado é apresentado na tabela de clientes  quando é inserido os dados de um cliente inexistente.
+Pré-condições: Usuário logado na aplicação.
+Passos:
+No menu "QA" na parte superior da tela navegar até a aba Transações e selecionar a opção Listar.
+Não clicar no campo Selecionar Cliente assim não será selecionado nenhum cliente da lista.
+Preencher o campo Valor Transação com o valor desejado.
+Clicar no botão pesquisar
+Resultado Esperado:
+Mensagem: Devera aparecer a mensagemn de erro "Selecione um Cliente" em vermelho indicando alerta abaixo do campo Selecione Cliente.
+
+CT016 - Incluir trasação sem preencher o campo Valor Transação:
+Objetivo: Validar que nenhum dado é apresentado na tabela de Transações quando é inserido os dados de um cliente inexistente.
+Pré-condições: Usuário logado na aplicação.
+Passos:
+No menu "QA" na parte superior da tela navegar até a aba Transações e selecionar a opção Listar.
+Não clicar no campo Selecionar Cliente assim não será selecionado nenhum cliente da lista.
+Preencher o campo Valor Transação com o valor desejado.
+Clicar no botão pesquisar
+Resultado Esperado:
+Mensagem: Devera aparecer a mensagemn de erro "Campo Obrigatório" em vermelho indicando alerta abaixo do campo Valor Transacao.
+
+
+"PAGINA LISTAR TRANSAÇÕES"
+
+CT017- Listar transações com a opção TODOS no campo Cliente
+Objetivo: Validar a listagem de transações de clientes.
+Pré-condições: Usuário logado na aplicação.
+Passos:
+No menu "QA" na parte superior da tela navegar até a aba Transações e selecionar a opção Listar.
+No campo Cliente irá vir por padrao Todos, manter essa opção.
+Clicar no botão pesquisar
+Resultado Esperado:
+Serão listados abaixo as transações de todos os clientes com os dados Cliente, CPF Data Transação,Valor e Ações(onde podera ser exibido os dados da transação ao clicar na lupa).
+
+CT018- Listar transações de um cliente expecifico
+Objetivo: Validar a listagem de clientes.
+Pré-condições: Usuário logado na aplicação.
+Passos:
+No menu "QA" na parte superior da tela navegar até a aba Transações e selecionar a opção Listar.
+No campo Cliente selecionar o cliente que deseja ver as transações.
+Clicar no botão pesquisar
+Resultado Esperado:
+Serão listados abaixo as transações realizadas pelo cliente selecionado junto com os dados Cliente, CPF Data Transação,Valor e Ações(onde podera ser exibido os dados da transação ao clicar na lupa).
+
+3.Reporte de Erros
+
+Processo de Execução:
+
+Para cada caso de teste listado acima:
+Garantir que o usuário está logado antes de iniciar os passos.
+Siga os passos detalhados.
+Observe os resultados obtidos.
+Compare os resultados obtidos com os resultados esperados.
+Em caso de falha, siga o padrão de reportagem de erros.
+
+ID do Defeito: DEF001
+Título: Inclusao de cliente sem Preencher o Campo "Saldo Dispinivel"
+Gravidade: (Critica)
+Prioridade: (Alta)
+Módulo Afetado: Clientes
+Pré-condições para Reprodução: Executar o caso de teste CT004.
+Resultado Esperado: Dado que foi tentado incluirum cliente sem preencher o campo Saldo Disponivel, o sistema deveria barrar e mostrar uma mensagem abaixo do campo com a mensagem "Campo Obrigatório".
+Resultado Atual: Mesmo sem preencher o campo Saldo Disponível, o sistema esta permitindo que o cliente seja criado.
+
+ID do Defeito: DEF002
+Título: Pagina Listar Clientes aparecendo em Branco
+Gravidade: (Critica)
+Prioridade: (Alta)
+Módulo Afetado: Clientes
+Pré-condições para Reprodução: Executar o caso de teste CT006.
+Resultado Esperado:Dado que foi acessado a página Listar Clientes devera ser exibida uma tabela com todos os clientes existentes no banco.
+Resultado Atual: Ao acessar a página ela encontra-se em branco sem nenhum cliente listado
+
+ID do Defeito: DEF003
+Título: Listar Cliente Sem preencher o Campo Nome e Data Validade
+Gravidade: (Critica)
+Prioridade: (Alta)
+Módulo Afetado: Clientes
+Pré-condições para Reprodução: Executar o caso de teste CT009.
+Resultado Esperado: Dado que na pagina de Listar clientes não é preenchido nem o nome nem data validade, quando clicar no botão pesquisa devera aparecer uma mensagem de erro abixo dos campos obrigatórios informando a mensagem "Campo Obrigatório"
+Resultado Atual: Mesmo sem preencher os campos Nome e Data Validade, o sistema esta permitindo a listagem de clientes sem apresentar mensagem de erro.
+
+ID do Defeito: DEF004
+Título: Listar Cliente pelo Nome Sem preencher o Campo Nome.
+Gravidade: (Critica)
+Prioridade: (Alta)
+Módulo Afetado: Clientes
+Pré-condições para Reprodução: Executar o caso de teste CT011.
+Resultado Esperado: Dado que na pagina de Listar clientes não é preenchido o Nome, o sistema deveria barrar e mostrar uma mensagem abaixo do campo com a mensagem "Campo Obrigatório".
+Resultado Atual: Mesmo sem preencher os campos Nome, o sistema esta permitindo a listagem de clientes sem apresentar mensagem de erro.
+
+ID do Defeito: DEF005
+Título: Incluir transação sem selecionar Cliente e não preenchendo Valor transação travando a tela e não exibindo mensagem de erro.
+Gravidade: (Critica)
+Prioridade: (Alta)
+Módulo Afetado: Transação
+Pré-condições para Reprodução: Executar o caso de teste CT015 e CT016 juntos.
+Resultado Esperado: Dado que na pagina de Incluir transação, ao preencher o campo de Valor Transação e não selecionar o cliente, ao clicar no botão salvar mostrar uma mensagem abaixo do campo Nome com a mensagem "Selecione um Cliente" e do campo Calor Transação com "Campo Obrigatório".
+Resultado Atual: Ao tentar incluir uma transação não preenchendo o campo Valor Transação e não selecionando nenhum cliente, o sitema não esta apresentando mensagem de erro e travando o sistem impossibilitando editar e salvar o campo que não foi preenchido corretamente.
+
+ID do Defeito: DEF006
+Título: Incluir transação sem selecionar cliente travando a tela e não exibindo mensagem de erro.
+Gravidade: (Critica)
+Prioridade: (Alta)
+Módulo Afetado: Clientes
+Pré-condições para Reprodução: Executar o caso de teste CT015
+Resultado Esperado: Dado que na pagina de Incluir transação, ao preencher o campo de Valor Transação e não selecionar o cliente, ao clicar no botão salvar mostrar uma mensagem abaixo do campo com a mensagem "Selecione um Cliente".
+Resultado Atual: Ao tentar incluir uma transação preenchendo o campo Valor Transação e não selecionando nenhum cliente, o sitema não esta apresentando mensagem de erro e travando o sistem impossibilitando editar e salvar o campo que não foi preenchido corretamente.
+
+ID do Defeito: DEF007
+Título: Incluir transação sem preencher o campo Valor Transação travando a tela e não exibindo mensagem de erro.
+Gravidade: (Critica)
+Prioridade: (Alta)
+Módulo Afetado: Clientes
+Pré-condições para Reprodução: Executar o caso de teste CT016.
+Resultado Esperado: Dado que na pagina de Incluir transação, ao não preencher o campo de Valor Transação e selecionar um cliente válido, ao clicar no botão salvar mostrar uma mensagem abaixo do campo com a mensagem "Campo Obrigatório".
+Resultado Atual: Ao tentar incluir uma transação não preenchendo o campo Valor Transação e não selecionando nenhum cliente, o sitema não esta apresentando mensagem de erro e travando o sistem impossibilitando editar e salvar o campo que não foi preenchido corretamente.
+
+
+Parecer sobre a Aplicação:
+
+"Consegui validar os principais fluxos da aplicação, como a inclusão e a listagem de clientes e transações. Os testes cobriram alguns cenários positivos e negativos. Também observei pontos relacionados à interface e usabilidade, como mensagens de erro claras e comportamento consistente. O sistema respondeu bem algumas vezes durante a navegação, msa pude verificar que as vezes havia lentidão no sistema. Sempre que encontrei algum ponto fora do esperado, documentei e reportei como erro.

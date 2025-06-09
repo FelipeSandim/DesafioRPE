@@ -1,0 +1,4 @@
+package service.resourceService;
+
+public class BuscarResourceInexistenteService {
+}
